@@ -1,0 +1,6 @@
+imc: *I,RUNLD: Successfully loaded run /home/student/pdrwal/SoC/all_files/cov_work/scope/merged_results.
+imc: *W,REPDEP: The report command will be deprecated in the next release. You can use the report_metrics command to generate the required report.
+name                                     Overall Average      Overall Covered      Code Average         Code Covered         Fsm Average          Fsm Covered          Functional Average   Functional Covered   
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+top                                      95.11%               90.66% (1252/1381/3) 90.21%               89.83% (1139/1268/3) n/a                  n/a                  100.00%              100.00% (113/113)    
+|--DUT                                   98.21%               98.21% (55/56)       98.21%               98.21% (55/56)       n/a                  n/a                  n/a                  n/a                  
