@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>LAB2a</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>ro.amiq.dvt.MixedLangBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>ro.amiq.vlogdt.VlogNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>DVT Auto-Linked</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal/SoC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal/SoC/LAB2a</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal/SoC/LAB2a/scoreboard.sv</name>
+			<type>1</type>
+			<locationURI>DVT_PATH/home/student/pdrwal/SoC/LAB2a/scoreboard.sv</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal/SoC/LAB2a/tester.sv</name>
+			<type>1</type>
+			<locationURI>DVT_PATH/home/student/pdrwal/SoC/LAB2a/tester.sv</locationURI>
+		</link>
+		<link>
+			<name>DVT Auto-Linked/home/student/pdrwal/SoC/LAB2a/top.sv</name>
+			<type>1</type>
+			<locationURI>DVT_PATH/home/student/pdrwal/SoC/LAB2a/top.sv</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
