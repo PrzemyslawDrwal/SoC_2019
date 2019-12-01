@@ -1,0 +1,110 @@
+TOOL:	xrun	18.09-s011: Started on Nov 30, 2019 at 19:18:10 CET
+xrun
+	-f alu_mtm.f
+		mtm_Alu.vp
+	-f alu_tb.f
+		alu_pkg.sv
+		alu_bfm.sv
+		top.sv
+		+incdir+tb_classes
+		+incdir+.
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	-xmlibdirname INCA_libs_gui
+	+access+r
+	+gui
+	+overwrite
+	-nocopyright
+	-coverage all
+	-covoverwrite
+	-covfile xrun_covfile.txt
+	-uvm
+	+UVM_NO_RELNOTES
+	+UVM_VERBOSITY=MEDIUM
+	-covtest random_test
+	-l xrun_gui.log
+	-s
+
+   User defined plus("+") options:
+	+UVM_NO_RELNOTES
+	+UVM_VERBOSITY=MEDIUM
+
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xrun: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+INCLUDE $PDK_DIR/cds/cds.lib
+|
+xmsim: *W,DLCVAR (/home/student/pdrwal/cds.lib,1): cds.lib Invalid environment variable ''.
+SVSEED default: 1
+xmsim: *W,RNDXCELON: Xceligen, the new SystemVerilog constraint solver is used. Disabling Xceligen and using the legacy constraint solver is possible with "xrun/xmsim -xceligen on=0 ...".
+xcelium> 
+xcelium> source /cad/XCELIUM1809/tools/xcelium/files/xmsimrc
+xcelium> source /cad/XCELIUM1809/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> 
+-------------------------------------
+Relinquished control to SimVision...
+# Restoring simulation environment...
+xcelium> input -quiet .reinvoke.sim
+xcelium> file delete .reinvoke.sim
+xcelium> run
+----------------------------------------------------------------
+CDNS-UVM-1.1d (18.09-s011)
+(C) 2007-2013 Mentor Graphics Corporation
+(C) 2007-2013 Cadence Design Systems, Inc.
+(C) 2006-2013 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+----------------------------------------------------------------
+UVM_FATAL @ 0: reporter [NOCOMP] No components instantiated. You must either instantiate at least one component before calling run_test or use run_test to do so. To run a test using run_test, use +UVM_TESTNAME or supply the test name in the argument to run_test(). Exiting simulation.
+
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :    0
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    1
+** Report counts by id
+[NOCOMP]     1
+Simulation complete via $finish(1) at time 0 FS + 0
+/cad/XCELIUM1809/tools/methodology/UVM/CDNS-1.1d/sv/src/base/uvm_report_object.svh:292     $finish;
+xcelium> ^C
+xcelium> exit
+See ./cov_work/scope/random_test/icc.com file for message(s) on coverage constant object marking
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  top(top)
+  scope    :  scope
+  testname :  random_test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_3ae3be39_01edd37e.ucm
+  data               :  ./cov_work/scope/random_test/icc_3ae3be39_01edd37e.ucd
+TOOL:	xrun	18.09-s011: Exiting on Nov 30, 2019 at 19:18:19 CET  (total: 00:00:09)

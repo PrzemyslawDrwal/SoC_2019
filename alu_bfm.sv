@@ -1,5 +1,14 @@
 interface alu_bfm;
-   import alu_pkg::*;
+  import alu_pkg::*;
+
+//typedef enum bit[2:0] { AND = 3'b000,
+//                                OR = 3'b001,
+//                                ADD = 3'b100,
+//                                SUB = 3'b101,
+//                                RST = 3'b010,
+//                                ERR_CRC = 3'b011,
+//                                ERR_OP = 3'b110,
+//                                ERR_DATA = 3'b111} operation_t;
 
 
         bit [0:54] data_out_sample;
@@ -147,6 +156,53 @@ task send_data(input bit [0:98]  i_data_in, input operation_t i_op_set  );
      
 
    endtask : send_data
+
+
+task reset_alu();
+    rst_n = 1'b0;
+    @(negedge clk);
+    @(negedge clk);
+    rst_n = 1'b1;
+endtask : reset_alu
+
+command_monitor command_monitor_h;
+
+function operation_t op2enum();
+    operation_t opi;
+    if( ! $cast(opi,op_set) )
+        $fatal(1, "Illegal operation on op bus");
+    return opi;
+endfunction : op2enum
+
+
+always @(posedge clk) begin : op_monitor
+    command_s command;
+    command.B_test = B_test;
+    command.A_test = A_test;
+    command.op_set_test = op2enum(); 
+    command.C_test = C_test;
+    command.failed = failed;
+    command.C_probed = C_probed;
+    command.data_out_sample = data_out_sample;
+    command_monitor_h.write_to_monitor(command);
+end : op_monitor
+
+always @(negedge rst_n) begin : rst_monitor
+    command_s command;
+    command.op_set = RST;
+    if (command_monitor_h != null) //guard against VCS time 0 negedge
+        command_monitor_h.write_to_monitor(command);
+end : rst_monitor
+
+result_monitor result_monitor_h;
+
+initial begin : result_monitor_thread
+    forever begin
+        @(posedge clk) ;
+        if (C_probed)
+            result_monitor_h.write_to_monitor(C_probed);
+    end
+end : result_monitor_thread
 
 
 

@@ -4,14 +4,14 @@
 # -g option starts xrun simulation with gui, with separate database
 
 # To set the paths for xrun and imc, execute the following command in the terminal:
- source /cad/env/cadence_path.XCELIUM1809
+# source /cad/env/cadence_path.XCELIUM1809
 
 # Help library if available with command:
 # cdnshelp &
 
 #------------------------------------------------------------------------------
 # test name
-TESTS=(random_test add_test);
+TESTS=(lab01);
 #------------------------------------------------------------------------------
 # MAIN
 function main(){
@@ -44,8 +44,8 @@ separator=`perl -e "print \"#\" x $cols"`
 #------------------------------------------------------------------------------
 # simulator arguments #<<<
 XRUN_ARGS="\
-  -f alu_mtm.f \
-  -f alu_tb.f \
+  -f dut.f \
+  -f tb.f \
   -v93 \
   +nowarnDSEM2009 \
   +nowarnDSEMEL \
@@ -57,9 +57,6 @@ XRUN_ARGS="\
   -coverage all \
   -covoverwrite \
   -covfile xrun_covfile.txt \
-  -uvm \
-  +UVM_NO_RELNOTES \
-  +UVM_VERBOSITY=MEDIUM
 "
 #>>>
 #------------------------------------------------------------------------------
@@ -106,22 +103,19 @@ function xrun_run_all_tests() { #<<<
       xrun $XRUN_ARGS \
         -covtest ${TESTS[0]} \
         -l xrun_gui.log
-        +UVM_TESTNAME=${TESTS[0]} 
+#        +UVM_TESTNAME=${TESTS[0]} \
   else  
     TEST_LIST=""
 
     for TEST in ${TESTS[@]} ; do
       TEST_LIST="$TEST_LIST $TEST"
       xrun_info "# Running test: $TEST. Log saved to xrun_test_$TEST.log"
-      
       # run the simulation
       xrun $XRUN_ARGS \
         -covtest $TEST \
-        -l xrun_test_$TEST.log \
-        +UVM_TESTNAME=$TEST
-
+        -l xrun_test_$TEST.log
+#        +UVM_TESTNAME=$TEST \
       xrun_check_status $? "Test $TEST"
-
     done
 
     echo "# End of tests."

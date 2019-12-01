@@ -1,5 +1,24 @@
-imc: *I,RUNLD: Successfully loaded run /home/student/pdrwal/SoC/LAB4v2/cov_work/scope/merged_results.
-imc: *W,REPDEP: The report command will be deprecated in the next release. You can use the report_metrics command to generate the required report.
+*I,RUNLD: Successfully loaded run /home/student/pdrwal/SoC/LAB4v2/cov_work/scope/add_test.
+*I,MERGL1: Merging Simulation Coverage ...
+----------------------------
+*I,MERGL1: Preparing target model ...
+*I,MERGL1: Reading model of primary run (cov_work/scope/random_test) as initial model: cov_work/scope/icc_3ae3be39_249073cb.ucm
+*I,MERGL1: Target model generated successfully.
+*I,MERGL1: Projecting Simulation ucd data into the target model ...
+*I,MERGL2:   cov_work/scope/random_test:
+*I,MERGL3:       Data is projected in to the target model.
+*I,MERGL2:   cov_work/scope/add_test:
+*I,MERGL3:       Data is projected in to the target model.
+*I,MERGL1: Writing output database cov_work/scope/merged_results:
+*I,MERGL2:   Model: cov_work/scope/merged_results/icc_3ae3be39_249073cb.ucm
+*I,MERGL2:   Data : cov_work/scope/merged_results/icc_3ae3be39_249073cb.ucd
+*I,MERGL1: No Specman coverage databases found in the runs.
+Total conflicts during target model creation: 0
+Total items not merged                      : 0
+Total runs not considered during target model creation: 0
+Total runs not merged                                 : 0
+*I,RUNLD: Successfully loaded run /home/student/pdrwal/SoC/LAB4v2/cov_work/scope/merged_results.
+*W,REPDEP: The report command will be deprecated in the next release. You can use the report_metrics command to generate the required report.
 name                                     Overall Average      Overall Covered      Code Average         Code Covered         Fsm Average          Fsm Covered          Functional Average   Functional Covered   
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uvm_pkg                                  n/a                  n/a                  n/a                  n/a                  n/a                  n/a                  n/a                  n/a                  
