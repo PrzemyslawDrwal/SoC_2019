@@ -3,15 +3,21 @@ module top;
    import   alu_pkg::*;
 `include "alu_macros.svh"
 `include "uvm_macros.svh"
+   
+ alu_bfm       class_bfm();
+   
+ mtm_Alu class_dut (.clk(class_bfm.clk), .rst_n(class_bfm.rst_n), .sin(class_bfm.sin), .sout(class_bfm.sout));
 
-alu_bfm     bfm();
-mtm_Alu DUT (.clk(bfm.clk), .rst_n(bfm.rst_n), .sin(bfm.sin), .sout(bfm.sout));
+ alu_bfm       module_bfm();
 
+ mtm_Alu module_dut (.clk(module_bfm.clk), .rst_n(module_bfm.rst_n), .sin(module_bfm.sin), .sout(module_bfm.sout));
+// stimulus generator for module_dut
+ alu_tester_module stim_module(module_bfm);
 
-initial begin
-   uvm_config_db #(virtual alu_bfm)::set(null, "*", "bfm", bfm);
-   run_test();
-end
+ initial begin
+  uvm_config_db #(virtual alu_bfm)::set(null, "*", "class_bfm", class_bfm);
+  uvm_config_db #(virtual alu_bfm)::set(null, "*", "module_bfm", module_bfm);
+  run_test("dual_test");
+ end
 
 endmodule : top
-

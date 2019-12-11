@@ -14,21 +14,27 @@ package alu_pkg;
                                 ERR_DATA = 3'b111} operation_t;
 
 
+// configs
+`include "env_config.svh"
+`include "alu_agent_config.svh"
+
+// transactions
 `include "random_command_tran.svh"
 `include "minmax_command_tran.svh"
 `include "result_transaction.svh"
+
+// testbench components
 `include "coverage.svh"
 `include "tester.svh"
 `include "scoreboard.svh"
 `include "driver.svh"
 `include "command_monitor.svh"
 `include "result_monitor.svh"
-
+`include "alu_agent.svh"
 `include "env.svh"
 
-`include "random_test.svh"
-`include "add_test.svh"
-
+// tests
+`include "dual_test.svh"
 
 endpackage : alu_pkg
 
