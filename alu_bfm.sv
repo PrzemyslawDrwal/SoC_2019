@@ -16,6 +16,8 @@ interface alu_bfm;
         bit C_probed = 1'b0;
         bit queue_in [$:98];
         bit queue_out [$:54];
+        bit [0:98]  data_in;
+
 
         bit clk;
         bit rst_n;
@@ -25,11 +27,14 @@ interface alu_bfm;
 
 	operation_t op_set;
 
+	bit [31:0] B;
+        bit [31:0] A;
 	bit [31:0] B_test;
         bit [31:0] A_test;
         bit [3:0] CRC_test;
         operation_t op_set_test;
 	bit [31:0]    C_test;
+	wire [31:0]    result;
 
 function bit [31:0] decoder_C(bit [0:54] Data);
         bit [31:0] C_Decoded;
@@ -92,7 +97,8 @@ endfunction
         B_test = decoder_B(data_in_sample);
         A_test = decoder_A(data_in_sample);
         CRC_test = decoder_CRC(data_in_sample);
-        op_set_test = decoder_OP(data_in_sample);
+        //op_set_test = decoder_OP(data_in_sample);
+        op_set_test = op_set;
    end : probe_in
 
 
@@ -168,30 +174,30 @@ endtask : reset_alu
 command_monitor command_monitor_h;
 
 function operation_t op2enum();
-    operation_t opi;
-    if( ! $cast(opi,op_set) )
-        $fatal(1, "Illegal operation on op bus");
-    return opi;
+      case (op_set_test)
+        3'b000 : return AND;
+        3'b001 : return ADD;
+        3'b010 : return SUB;
+        3'b011 : return OR; 
+        3'b100 : return RST;
+        3'b101 : return ERR_CRC;
+        3'b110 : return ERR_DATA;
+        3'b111 : return ERR_OP;
+      endcase // case (op_set_test)
 endfunction : op2enum
 
 
 always @(posedge clk) begin : op_monitor
-    command_s command;
-    command.B_test = B_test;
-    command.A_test = A_test;
-    command.op_set_test = op2enum(); 
-    command.C_test = C_test;
-    command.failed = failed;
-    command.C_probed = C_probed;
-    command.data_out_sample = data_out_sample;
-    command_monitor_h.write_to_monitor(command);
+    random_command_tran command; 
+    if (C_probed)
+    	command_monitor_h.write_to_monitor(B_test, A_test, B, A, op_set_test, op_set, C_test, failed, C_probed, data_out_sample, data_in);
 end : op_monitor
 
 always @(negedge rst_n) begin : rst_monitor
-    command_s command;
-    command.op_set = RST;
+    random_command_tran command;
     if (command_monitor_h != null) //guard against VCS time 0 negedge
-        command_monitor_h.write_to_monitor(command);
+        command_monitor_h.write_to_monitor(0,0,0,0,RST,RST,0,0,0,0,0);
+
 end : rst_monitor
 
 result_monitor result_monitor_h;
@@ -200,7 +206,7 @@ initial begin : result_monitor_thread
     forever begin
         @(posedge clk) ;
         if (C_probed)
-            result_monitor_h.write_to_monitor(C_probed);
+            result_monitor_h.write_to_monitor(result);
     end
 end : result_monitor_thread
 

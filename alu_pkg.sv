@@ -14,26 +14,11 @@ package alu_pkg;
                                 ERR_DATA = 3'b111} operation_t;
 
 
-    typedef struct packed {
-        bit [31:0] B_test;
-        bit [31:0] A_test;
-        bit [31:0] B;
-        bit [31:0] A;
-        operation_t op_set_test;
-        operation_t op_set;
-        bit [31:0]    C_test;
-        bit failed;
-        bit C_probed;
-        bit [0:54] data_out_sample;
-        bit [0:98]  data_in;
-    } command_s;
-
-
-
+`include "random_command_tran.svh"
+`include "minmax_command_tran.svh"
+`include "result_transaction.svh"
 `include "coverage.svh"
-`include "base_tester.svh"
-`include "random_tester.svh"
-`include "add_tester.svh"
+`include "tester.svh"
 `include "scoreboard.svh"
 `include "driver.svh"
 `include "command_monitor.svh"
@@ -43,6 +28,7 @@ package alu_pkg;
 
 `include "random_test.svh"
 `include "add_test.svh"
+
 
 endpackage : alu_pkg
 
