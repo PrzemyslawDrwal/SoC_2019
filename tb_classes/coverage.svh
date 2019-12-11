@@ -2,9 +2,7 @@
 class coverage extends uvm_subscriber #(random_command_tran);
     `uvm_component_utils(coverage)
 
-
 virtual alu_bfm bfm;
-
 
         bit [31:0]    A;
         bit [31:0]    B;

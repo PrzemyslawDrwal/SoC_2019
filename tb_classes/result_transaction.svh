@@ -21,7 +21,7 @@ class result_transaction extends uvm_transaction;
 
    function string convert2string();
       string s;
-      s = $sformatf("result: %32h",result);
+      s = $sformatf("result: %8h",result);
       return s;
    endfunction : convert2string
 

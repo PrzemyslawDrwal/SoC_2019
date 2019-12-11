@@ -98,7 +98,7 @@ class random_command_tran extends uvm_transaction;
 
    function string convert2string();
       string s;
-      s = $sformatf("A: %32h  B: %32h A_test: %32h  B_test: %32h op_set: %s",
+      s = $sformatf("A: %8h  B: %8h A_test: %8h  B_test: %8h op_set: %s",
                         A, B, A_test, B_test, op_set.name());
       return s;
    endfunction : convert2string
