@@ -1,9 +1,8 @@
 
-class scoreboard extends uvm_subscriber #(shortint);
+class scoreboard extends uvm_subscriber #(result_transaction);
     `uvm_component_utils(scoreboard)
 
-    virtual alu_bfm bfm;
-    uvm_tlm_analysis_fifo #(command_s) cmd_f;
+    uvm_tlm_analysis_fifo #(random_command_tran) cmd_f;
 
     function new (string name, uvm_component parent);
         super.new(name, parent);
@@ -12,6 +11,7 @@ class scoreboard extends uvm_subscriber #(shortint);
     function void build_phase(uvm_phase phase);
         cmd_f = new ("cmd_f", this);
     endfunction : build_phase
+
 
 
 bit [3:0] flags;
@@ -86,50 +86,58 @@ protected function bit [3:0] predict_flags(input bit[31:0] A,B,C,op);
 end
 endfunction
 
-    function void write(shortint t);
-        shortint predicted_result;
-        command_s cmd;
-	//while(cmd.op_set_test!=RST);
+    function void write(result_transaction t);
+        string data_str;
+        random_command_tran cmd;
+        result_transaction predicted;
+do
+            if (!cmd_f.try_get(cmd))
+                $fatal(1, "Missing command in self checker");
+        while (cmd.op_set_test == RST);
+
+       predicted = predict_result(cmd);
+
+        data_str  = { cmd.convert2string(),
+            " ==>  Actual " , t.convert2string(),
+            "/Predicted ",predicted.convert2string()};
+
+
         if(cmd.C_probed == 1'b1) begin
                 ERR_probed = decoder_ERR(cmd.data_out_sample);
                 case (cmd.op_set_test)
                         OR : begin : case_OR
-                                C_predicted = cmd.A_test | cmd.B_test;
                                 flags = decoder_FLAGS(cmd.data_out_sample);
                                 flags_predicted = predict_flags(cmd.A_test,cmd.B_test,cmd.C_test,cmd.op_set_test);
                                 crc_out_predicted = get_crc_out({cmd.C_test,1'b0,flags_predicted},3'b000);
                                 crc_out_test = decoder_CRC_OUT(cmd.data_out_sample);
-                                if ( C_predicted != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
+                                if ( predicted.result != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
                                         cmd.failed = 1'b1;
                         end
                         end
 			 AND : begin : case_AND
-                                C_predicted = cmd.A_test & cmd.B_test;
                                 flags = decoder_FLAGS(cmd.data_out_sample);
                                 flags_predicted = predict_flags(cmd.A_test,cmd.B_test,cmd.C_test,cmd.op_set_test);
                                 crc_out_predicted = get_crc_out({cmd.C_test,1'b0,flags_predicted},3'b000);
                                 crc_out_test = decoder_CRC_OUT(cmd.data_out_sample);
-                                if ( C_predicted != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
+                                if ( predicted.result != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
                                         cmd.failed = 1'b1;
                         end
                         end
                         SUB : begin : case_SUB
-                                C_predicted = cmd.B_test - cmd.A_test;
                                 flags = decoder_FLAGS(cmd.data_out_sample);
                                 flags_predicted = predict_flags(cmd.A_test,cmd.B_test,cmd.C_test,cmd.op_set_test);
                                 crc_out_predicted = get_crc_out({cmd.C_test,1'b0,flags_predicted},3'b000);
                                 crc_out_test = decoder_CRC_OUT(cmd.data_out_sample);
-                                if ( C_predicted != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
+                                if ( predicted.result != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
                                         cmd.failed = 1'b1;
                         end
                         end
 			ADD : begin : case_ADD
-                                C_predicted = cmd.A_test + cmd.B_test;
                                 flags = decoder_FLAGS(cmd.data_out_sample);
                                 flags_predicted = predict_flags(cmd.A_test,cmd.B_test,cmd.C_test,cmd.op_set_test);
                                 crc_out_predicted = get_crc_out({cmd.C_test,1'b0,flags_predicted},3'b000);
                                 crc_out_test = decoder_CRC_OUT(cmd.data_out_sample);
-                                if ( C_predicted != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
+                                if (predicted.result  != cmd.C_test || flags_predicted != flags || crc_out_predicted != crc_out_test ) begin
                                         cmd.failed = 1'b1;
                         end
                         end
@@ -148,32 +156,28 @@ endfunction
                 endcase
         end
         cmd.C_probed = 1'b0;
-        if (cmd.failed == 1'b1)
-          $error ("FAILED");
+      //  if (cmd.failed == 1'b1)
+      //    $error ("FAILED");
 
     endfunction : write
 
-//    function void write(shortint t);
-//        shortint predicted_result;
-//        command_s cmd;
-  //      cmd.A  = 0;
-  //      cmd.B  = 0;
-  //      cmd.op = no_op;
-  //      do
-  //          if (!cmd_f.try_get(cmd))
-  //              $fatal(1, "Missing command in self checker");
-  //      while ((cmd.op == no_op) || (cmd.op == rst_op));
-  //      case (cmd.op)
-  //          add_op: predicted_result = cmd.A + cmd.B;
-  //          and_op: predicted_result = cmd.A & cmd.B;
-  //          xor_op: predicted_result = cmd.A ^ cmd.B;
-  //          mul_op: predicted_result = cmd.A * cmd.B;
-  //      endcase // case (op_set)
-  //      if (predicted_result != t)
-  //          $error (
-  //              "FAILED: A: %2h  B: %2h  op: %s actual result: %4h   expected: %4h",
-  //              cmd.A, cmd.B, cmd.op.name(), t, predicted_result);
-//    endfunction : write
+    function result_transaction predict_result(random_command_tran cmd);
+        result_transaction predicted;
+
+        predicted = new("predicted");
+
+        case (cmd.op_set_test)
+             OR : predicted.result = cmd.A_test | cmd.B_test;
+             AND : predicted.result = cmd.A_test & cmd.B_test;
+             ADD : predicted.result = cmd.A_test + cmd.B_test;
+             SUB : predicted.result = cmd.A_test - cmd.B_test;
+
+        endcase // case (op_set)
+
+        return predicted;
+
+    endfunction : predict_result
+
 
 endclass : scoreboard
 

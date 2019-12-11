@@ -1,6 +1,7 @@
-class coverage extends uvm_subscriber #(command_s);
-    `uvm_component_utils(coverage)
     
+class coverage extends uvm_subscriber #(random_command_tran);
+    `uvm_component_utils(coverage)
+
 
 virtual alu_bfm bfm;
 
@@ -112,10 +113,10 @@ covergroup zeros_or_ones_on_ops;
         zeros_or_ones_on_ops = new();
     endfunction : new
 
-    function void write(command_s t);
-        A      = t.A_test;
-        B      = t.B_test;
-        op_set = t.op_set_test;
+    function void write(random_command_tran t);
+        A      = t.A;
+        B      = t.B;
+        op_set = t.op_set;
         op_cov.sample();
         zeros_or_ones_on_ops.sample();
     endfunction : write

@@ -8,7 +8,7 @@ class add_test extends random_test;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        random_tester::type_id::set_type_override(add_tester::get_type());
+	random_command_tran::type_id::set_type_override(minmax_command_tran::get_type());
     endfunction : build_phase
 
 endclass
