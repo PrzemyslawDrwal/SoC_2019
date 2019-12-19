@@ -2,7 +2,7 @@
 class scoreboard extends uvm_subscriber #(result_transaction);
     `uvm_component_utils(scoreboard)
 
-    uvm_tlm_analysis_fifo #(random_command_tran) cmd_f;
+    uvm_tlm_analysis_fifo #(sequence_item) cmd_f;
 
     function new (string name, uvm_component parent);
         super.new(name, parent);
@@ -88,7 +88,8 @@ endfunction
 
     function void write(result_transaction t);
         string data_str;
-        random_command_tran cmd;
+      sequence_item cmd;
+
         result_transaction predicted;
 do
             if (!cmd_f.try_get(cmd))
@@ -161,7 +162,7 @@ do
 
     endfunction : write
 
-    function result_transaction predict_result(random_command_tran cmd);
+    function result_transaction predict_result(sequence_item cmd);
         result_transaction predicted;
 
         predicted = new("predicted");

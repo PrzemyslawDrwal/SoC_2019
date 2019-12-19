@@ -3,8 +3,7 @@ class command_monitor extends uvm_component;
     `uvm_component_utils(command_monitor)
 
     virtual alu_bfm bfm;
-
-    uvm_analysis_port #(random_command_tran) ap;
+    uvm_analysis_port #(sequence_item) ap;
 
     function new (string name, uvm_component parent);
         super.new(name,parent);
@@ -18,7 +17,7 @@ class command_monitor extends uvm_component;
     endfunction : build_phase
 
     function void write_to_monitor(bit [31:0] B_test, bit [31:0] A_test, bit [31:0] B, bit [31:0] A, operation_t op_set_test, operation_t op_set, bit [31:0] C_test, bit failed, bit C_probed, bit [0:54] data_out_sample, bit [0:98]  data_in );
-        random_command_tran cmd;
+        sequence_item cmd;
         `uvm_info("COMMAND MONITOR",$sformatf("MONITOR: A: %32h  B: %32h  op_set: %s",A, B, op_set.name()), UVM_HIGH);
         cmd    = new("cmd");
 	cmd.B_test = B_test;
