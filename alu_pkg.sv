@@ -14,11 +14,25 @@ package alu_pkg;
                                 ERR_DATA = 3'b111} operation_t;
 
 
-`include "random_command_tran.svh"
-`include "minmax_command_tran.svh"
+`include "sequence_item.svh"
+    // used instead of the sequencer class
+    typedef uvm_sequencer #(sequence_item) sequencer;
+
+// sequences
+`include "random_sequence.svh"
+`include "minmax_sequence.svh"
+
+// sequencer class is used by runall_sequence class for casting
+//`include "sequencer.svh"
+
+// virtual sequences
+`include "runall_sequence.svh"
+
+// can be converted into sequence items
 `include "result_transaction.svh"
+
+// testbench components (no agent here)
 `include "coverage.svh"
-`include "tester.svh"
 `include "scoreboard.svh"
 `include "driver.svh"
 `include "command_monitor.svh"
@@ -26,8 +40,9 @@ package alu_pkg;
 
 `include "env.svh"
 
-`include "random_test.svh"
-`include "add_test.svh"
+// tests
+`include "alu_base_test.svh"
+`include "full_test.svh"
 
 
 endpackage : alu_pkg
